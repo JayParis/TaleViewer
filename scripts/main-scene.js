@@ -6,26 +6,18 @@ MainScene.attributes.add('speed', {
 
 MainScene.prototype.initialize = function() {
 
-    const bolt = assets.bolt.resource.instantiateRenderEntity({});
-    app.root.addChild(bolt);
     
-    var shaderDefinition = {
-        attributes: {
-            vVertex: pc.SEMANTIC_POSITION,
-            vNormal: pc.SEMANTIC_NORMAL,
-            vTexCoord: pc.SEMANTIC_TEXCOORD0
-        },
-        vshader: assets.vs.resource,
-        fshader: assets.fs.resource
-    };
+    plane.addComponent('render', {
+        type: 'plane'
+    });
+    app.root.addChild(plane);
+    plane.setEulerAngles(90,0,0);
     
-    var newShader = new pc.Shader(device, shaderDefinition);
-    bolt.render.meshInstances[0].material = new pc.Material();
-    bolt.render.meshInstances[0].material.shader = newShader;
-    
-    bolt.render.meshInstances[0].material.setParameter('uTime', 0);
-    bolt.render.meshInstances[0].material.setParameter('uDiffuseMap', assets.boltMatCap.resource);
-    
+    var testMat = new pc.BasicMaterial();
+    testMat.color.set(0.76,1,0.915);
+    testMat.colorMap = assets.testTexture.resource;
+    plane.render.material = testMat;//model mat
+
 
     const topText = new pc.Entity('toptext');
     topText.addComponent('element', {
@@ -47,11 +39,13 @@ MainScene.prototype.initialize = function() {
     app.root.addChild(light);
     light.setEulerAngles(45, 0, 0);
     
-    app.on('update', dt => bolt.rotate(10 * dt, 20 * dt, 10 * dt));
+    //app.on('update', dt => plane.rotate(10 * dt, 20 * dt, 10 * dt));
 
     //Device resize and orientation listeners
     //window.addEventListener('resize', () => this.resizeMethod());
     //window.addEventListener('orientationchange', () => this.resizeMethod());
+
+    this.resizeMobile();
 };
 
 MainScene.prototype.update = function(dt) {
@@ -60,4 +54,17 @@ MainScene.prototype.update = function(dt) {
 
 MainScene.prototype.swap = function(old) {
 
+};
+
+MainScene.prototype.resizeMobile = function() {
+
+    let appHeight = document.getElementById('application').offsetHeight;
+    let appWidth = document.getElementById('application').offsetWidth;
+
+    let scale = camera.camera.orthoHeight * (appWidth / appHeight) * 2;
+
+    plane.setLocalScale(scale,1,scale);
+    //plane.setLocalScale(2,1,2);
+
+    console.log("ResizeMobile: " + camera.camera.orthoHeight);
 };

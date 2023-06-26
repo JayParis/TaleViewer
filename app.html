@@ -44,15 +44,12 @@
             bpFont: new pc.Asset("Blender-Pro-Font", "font", {
                 url: "./assets/fonts/BlenderPro-Medium.json",
             }),
-            boltMatCap: new pc.Asset(
-                "Bolt-MatCap",
+            testTexture: new pc.Asset(
+                "Test-Texture",
                 "texture",
-                { url: "./assets/textures/BoltMatCap.jpg" },
+                { url: "./assets/textures/PlaneLines.png" },
                 { type: pc.TEXTURETYPE_RGBP, mipmaps: false }
             ),
-            bolt: new pc.Asset("Bolt", "container", {
-                url: "./assets/models/Bolt.glb",
-            }),
             vs: new pc.Asset("Bolt-Vertex-Shader", "shader", {
                 url: "./assets/shaders/bolt_vertex.glsl",
             }),
@@ -85,8 +82,9 @@
 
         const camera = new pc.Entity('camera');
         camera.addComponent('camera', {
-            fov: 60,
-            projection: pc.PROJECTION_PERSPECTIVE,
+            fov: 12,
+            orthoHeight: 10,
+            projection: pc.PROJECTION_ORTHOGRAPHIC,
             clearColor: new pc.Color(1, 0.7, 0.7) //0.1, 0.1, 0.01
         });
         app.root.addChild(camera);
@@ -109,6 +107,8 @@
             pivot: new pc.Vec2(0.0, 0.0), 
         });
         screen.addChild(uiGroup);
+
+        const plane = new pc.Entity('plane');
 
         //---
         
