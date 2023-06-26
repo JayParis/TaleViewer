@@ -1,6 +1,6 @@
 {
-    "name": "PWA Template",
-    "short_name": "PWA Template",
+    "name": "Tale Viewer",
+    "short_name": "Tale Viewer",
     "start_url": "index.html",
     "icons":[
         {
