@@ -1,34 +1,29 @@
-
 precision highp float;
-
-const vec4 cons1 = vec4(0.800000011921, 0.800000011921, 0.800000011921, 1.000000000000);
+varying vec2 vUv0;
 
 uniform sampler2D uDiffuseMap;
-uniform float uTime;
 
-varying vec3 Normal;
-varying vec2 TexCoord;
-varying vec3 Position;
-
-
-void material_preview_matcap(sampler2D ima,  vec4 mask, out vec4 result)
+void main(void)
 {
-	vec2 tex = vec2(0,0);
+	const float Pi = 6.28318530718; // Pi*2
     
-	tex.x =  0.5 + 0.5 * Normal.x;
-	tex.y =  0.5 + 0.5 * Normal.y;
+    const float Directions = 16.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
+    const float Quality = 4.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
+   
+    const float Radius = 0.025;
     
-	result = texture2D(ima, tex) * mask;
-}
+    vec4 Color = vec4(0);
+    
+    for( float d = 0.0; d<Pi; d += Pi/Directions)
+    {
+		for(float i = 1.0 / Quality; i <= 1.001; i += 1.0 / Quality)
+        {
+			Color += texture2D(uDiffuseMap, vUv0 + vec2(cos(d),sin(d))*Radius*i);		
+        }
+    }
+    
+    Color /= Quality * Directions + 1.0;
 
-void main()
-{
-	vec4 tmp5;
-	vec4 mask;
-
-	mask = vec4(1.0, 1.0, 1.0, 1.0);
-	material_preview_matcap(uDiffuseMap,  mask, tmp5);
-    
-    gl_FragColor =  tmp5;
+	gl_FragColor =  Color;
 }
 
