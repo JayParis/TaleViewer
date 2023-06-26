@@ -34,7 +34,7 @@ MainScene.prototype.initialize = function() {
         type: pc.ELEMENTTYPE_TEXT,
         font: assets.bpFont.resource,
         fontSize: 52,
-        text: "PWA Template",
+        text: "Tale Viewer",
         color: [0.01,0.01,0.01],
         alignment: [0.5,0.5],
     });
