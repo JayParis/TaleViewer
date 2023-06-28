@@ -14,6 +14,8 @@
     <link rel="manifest" href="./manifest.json">
     
     <script src='./scripts/engine.js'></script>
+    <!--<script src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'></script>-->
+    <script src='./scripts/supabase-js.js'></script>
 </head>
 <body>
     <div id="splash">
@@ -21,6 +23,21 @@
     </div>
     <canvas id='application'></canvas>
     <script>
+        
+        //import { createClient } from '@supabase/supabase-js'
+        //const { createClient } = supabase
+
+        const { createClient } = supabase;
+        
+        const _supabaseUrl = 'https://cfzcrwfmlxquedvdajiw.supabase.co';
+        const _supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmemNyd2ZtbHhxdWVkdmRhaml3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc3ODM3MjksImV4cCI6MjAwMzM1OTcyOX0.ISyn717q7x4h9SXUtn0nj9U2jaTzmOHqmfjL5FiswYE";
+        const _supabase  = createClient(_supabaseUrl, _supabaseKey);
+
+        console.log('Supabase Instance: ', _supabase);
+        // Backend
+
+        
+
         // create a PlayCanvas application
         const canvas = document.getElementById('application');
         canvas.style['-webkit-user-select'] = 'none';
@@ -110,9 +127,20 @@
 
         const plane = new pc.Entity('plane');
 
-        //---
+
+        const tapPos = new pc.Entity('tapPos');
+        tapPos.addComponent('render', {
+            type: 'plane'
+        });
+        app.root.addChild(tapPos);
+        tapPos.setEulerAngles(90,0,0);
+        tapPos.setPosition(0,0,1);
+        tapPos.setLocalScale(0.5,0.5,0.5);
+        var tapPosMat = new pc.BasicMaterial();
+        tapPosMat.color.set(1,0,0);
+        tapPos.render.material = tapPosMat;
         
     </script>
-    <script src='./scripts/ui-input-library.js'></script>
+    <!--<script src='./scripts/ui-input-library.js'></script>-->
 </body>
 </html>

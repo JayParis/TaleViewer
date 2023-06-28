@@ -12,12 +12,12 @@ MainScene.prototype.initialize = function() {
     app.root.addChild(plane);
     plane.setEulerAngles(90,0,0);
     
-    /*
     var testMat = new pc.BasicMaterial();
     //testMat.color.set(0.76,1,0.915);
     testMat.colorMap = assets.testTexture.resource;
     plane.render.material = testMat;//model mat
-    */
+    
+    /*
 
     var shaderDefinition = {
         attributes: {
@@ -31,10 +31,11 @@ MainScene.prototype.initialize = function() {
     var newShader = new pc.Shader(device, shaderDefinition);
     //console.log(plane.render.meshInstances[0].material);
     plane.render.meshInstances[0].material = new pc.Material();
+    plane.render.meshInstances[0].material.blendType = pc.BLEND_NORMAL;
     plane.render.meshInstances[0].material.shader = newShader;
     plane.render.meshInstances[0].material.setParameter('uDiffuseMap', assets.testTexture.resource);
 
-
+    */
 
     const topText = new pc.Entity('toptext');
     topText.addComponent('element', {
@@ -56,14 +57,94 @@ MainScene.prototype.initialize = function() {
     app.root.addChild(light);
     light.setEulerAngles(45, 0, 0);
     
-    app.on('update', dt => plane.rotate(50 * dt, 60 * dt, 70 * dt));
+    //app.on('update', dt => plane.rotate(50 * dt, 60 * dt, 70 * dt));
 
     //Device resize and orientation listeners
     window.addEventListener('resize', () => this.resizeMobile());
     window.addEventListener('orientationchange', () => this.resizeMobile());
 
     this.resizeMobile();
+
+    if(app.touch) {
+        touch.on(pc.EVENT_TOUCHSTART, this.inputDown, this);
+        touch.on(pc.EVENT_TOUCHMOVE, this.inputMove, this);
+        touch.on(pc.EVENT_TOUCHEND, this.inputUp, this);
+        touch.on(pc.EVENT_TOUCHCANCEL, this.inputUp, this);
+
+        this.on('destroy', function() {
+            touch.off(pc.EVENT_TOUCHSTART, this.inputDown, this);
+            touch.off(pc.EVENT_TOUCHMOVE, this.inputMove, this);
+            touch.off(pc.EVENT_TOUCHEND, this.inputUp, this);
+            touch.off(pc.EVENT_TOUCHCANCEL, this.inputUp, this);       
+        }, this);
+    } else if (app.keyboard && app.mouse) {
+        app.mouse.disableContextMenu();
+        app.mouse.on(pc.EVENT_MOUSEDOWN, this.inputDown, this);
+        app.mouse.on(pc.EVENT_MOUSEMOVE, this.inputMove, this);
+        app.mouse.on(pc.EVENT_MOUSEUP, this.inputUp, this);
+    }
+
+
+    const onKeyDown = function (e) {
+        if (e.key === pc.KEY_F) {
+            var remoteImages = [];
+            
+            for (let i = 1; i <= 6; i++) {
+                //srcUrls.push(_supabaseUrl + '/storage/v1/object/public/main-pages/Page_1_Main_000' + i + '.webp');
+                remoteImages.push(new pc.Asset("img_" + i, "texture", {
+                    url: _supabaseUrl + '/storage/v1/object/public/main-pages/Page_1_Main_000' + i + '.webp'
+                }));
+            }
+            var imageLoader = new pc.AssetListLoader(
+                Object.values(remoteImages),
+                app.assets
+            );
+            imageLoader.load(() => {
+                console.log(app.assets);
+            });
+        }
+        if(e.key === pc.KEY_1){
+            plane.render.material.colorMap = app.assets.find("img_1","texture").resource;
+			plane.render.material.update();
+        }
+        if(e.key === pc.KEY_2){
+            plane.render.material.colorMap = app.assets.find("img_2","texture").resource;
+			plane.render.material.update();
+        }
+        if(e.key === pc.KEY_3){
+            plane.render.material.colorMap = app.assets.find("img_3","texture").resource;
+			plane.render.material.update();
+        }
+        if(e.key === pc.KEY_4){
+            plane.render.material.colorMap = app.assets.find("img_4","texture").resource;
+			plane.render.material.update();
+        }
+        if(e.key === pc.KEY_5){
+            plane.render.material.colorMap = app.assets.find("img_5","texture").resource;
+			plane.render.material.update();
+        }
+        if(e.key === pc.KEY_6){
+            plane.render.material.colorMap = app.assets.find("img_6","texture").resource;
+			plane.render.material.update();
+        }
+        e.event.preventDefault(); // Use original browser event to prevent browser action.
+    };
+    app.keyboard.on("keydown", onKeyDown, this);
+    
 };
+
+MainScene.prototype.inputDown = function(event) {
+    tapPos.translate(0,1,0);
+}
+
+MainScene.prototype.inputMove = function(event) {
+    
+}
+
+MainScene.prototype.inputUp = function(event) {
+    
+}
+
 
 MainScene.prototype.update = function(dt) {
 
@@ -81,7 +162,4 @@ MainScene.prototype.resizeMobile = function() {
     let scale = camera.camera.orthoHeight * (appWidth / appHeight) * 2;
 
     plane.setLocalScale(scale,1,scale * 1.25066);
-    //plane.setLocalScale(2,1,2);
-
-    console.log("ResizeMobile: " + camera.camera.orthoHeight);
 };
