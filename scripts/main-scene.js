@@ -75,7 +75,7 @@ MainScene.prototype.initialize = function() {
             app.touch.off(pc.EVENT_TOUCHSTART, this.inputDown, this);
             app.touch.off(pc.EVENT_TOUCHMOVE, this.inputMove, this);
             app.touch.off(pc.EVENT_TOUCHEND, this.inputUp, this);
-            app.touch.off(pc.EVENT_TOUCHCANCEL, this.inputUp, this);       
+            app.touch.off(pc.EVENT_TOUCHCANCEL, this.inputUp, this);
         }, this);
     } else if (app.keyboard && app.mouse) {
         app.mouse.disableContextMenu();
@@ -134,11 +134,14 @@ MainScene.prototype.initialize = function() {
 };
 
 MainScene.prototype.inputDown = function(event) {
-    tapPos.translate(0,1,0);
+    //tapPos.translate(0,1,0);
 }
 
 MainScene.prototype.inputMove = function(event) {
-    
+    let screenX = app.touch ? event.touches[0].x : event.x;
+    let screenY = app.touch ? event.touches[0].y : event.y;
+
+    tapPos.setPosition(camera.camera.screenToWorld(screenX,screenY,1));
 }
 
 MainScene.prototype.inputUp = function(event) {
