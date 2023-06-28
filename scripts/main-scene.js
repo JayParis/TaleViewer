@@ -66,16 +66,16 @@ MainScene.prototype.initialize = function() {
     this.resizeMobile();
 
     if(app.touch) {
-        touch.on(pc.EVENT_TOUCHSTART, this.inputDown, this);
-        touch.on(pc.EVENT_TOUCHMOVE, this.inputMove, this);
-        touch.on(pc.EVENT_TOUCHEND, this.inputUp, this);
-        touch.on(pc.EVENT_TOUCHCANCEL, this.inputUp, this);
+        app.touch.on(pc.EVENT_TOUCHSTART, this.inputDown, this);
+        app.touch.on(pc.EVENT_TOUCHMOVE, this.inputMove, this);
+        app.touch.on(pc.EVENT_TOUCHEND, this.inputUp, this);
+        app.touch.on(pc.EVENT_TOUCHCANCEL, this.inputUp, this);
 
         this.on('destroy', function() {
-            touch.off(pc.EVENT_TOUCHSTART, this.inputDown, this);
-            touch.off(pc.EVENT_TOUCHMOVE, this.inputMove, this);
-            touch.off(pc.EVENT_TOUCHEND, this.inputUp, this);
-            touch.off(pc.EVENT_TOUCHCANCEL, this.inputUp, this);       
+            app.touch.off(pc.EVENT_TOUCHSTART, this.inputDown, this);
+            app.touch.off(pc.EVENT_TOUCHMOVE, this.inputMove, this);
+            app.touch.off(pc.EVENT_TOUCHEND, this.inputUp, this);
+            app.touch.off(pc.EVENT_TOUCHCANCEL, this.inputUp, this);       
         }, this);
     } else if (app.keyboard && app.mouse) {
         app.mouse.disableContextMenu();
