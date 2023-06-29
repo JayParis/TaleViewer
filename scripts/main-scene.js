@@ -109,6 +109,7 @@ MainScene.prototype.initialize = function() {
     const onKeyDown = function (e) {
         if (e.key === pc.KEY_F) {
             loadRemoteImages();
+            //loadedPage = true;
         }
         if(e.key === pc.KEY_1){
             plane.render.material.colorMap = app.assets.find("img_1","texture").resource;
@@ -165,7 +166,7 @@ MainScene.prototype.inputMove = function(event) {
 
     //currViewerID = Math.abs(Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)) % 15);
     //currViewerID = Math.abs((previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens))) % 15);
-    currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 160));
+    currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 80));
     if(loadedPage)
         this.viewer();
 
@@ -186,6 +187,7 @@ MainScene.prototype.swap = function(old) {
 };
 
 MainScene.prototype.viewer = function() {
+    
     //topText.element.text = "ids: " + currViewerID;
 
     let offsetID = app.assets.find("img_1","texture").id;
@@ -194,6 +196,10 @@ MainScene.prototype.viewer = function() {
     plane.render.material.colorMap = app.assets.get(offsetID - currViewerID).resource;
     plane.render.material.update();
     console.log('updating page');
+    
+
+    //let end = currViewerID.toString().padStart(4,'0');
+    //document.getElementById('splash-img').src = 'https://cfzcrwfmlxquedvdajiw.supabase.co/storage/v1/object/public/main-pages/Page_1_Main_'+ end +'.webp';
 };
 
 MainScene.prototype.resizeMobile = function() {
