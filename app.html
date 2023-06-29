@@ -126,6 +126,9 @@
         screen.addChild(uiGroup);
 
         const plane = new pc.Entity('plane');
+        const topText = new pc.Entity('toptext');
+        var tapPosVal = new pc.Vec3;
+        var holdPosVal = new pc.Vec3;
 
 
         const tapPos = new pc.Entity('tapPos');
@@ -139,6 +142,18 @@
         var tapPosMat = new pc.BasicMaterial();
         tapPosMat.color.set(1,0,0);
         tapPos.render.material = tapPosMat;
+
+        const holdPos = new pc.Entity('holdPos');
+        holdPos.addComponent('render', {
+            type: 'plane'
+        });
+        app.root.addChild(holdPos);
+        holdPos.setEulerAngles(90,0,0);
+        holdPos.setPosition(0,0,2);
+        holdPos.setLocalScale(0.25,0.25,0.25);
+        var holdPosMat = new pc.BasicMaterial();
+        holdPosMat.color.set(1,0,1);
+        holdPos.render.material = holdPosMat;
         
     </script>
     <!--<script src='./scripts/ui-input-library.js'></script>-->

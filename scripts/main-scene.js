@@ -37,7 +37,6 @@ MainScene.prototype.initialize = function() {
 
     */
 
-    const topText = new pc.Entity('toptext');
     topText.addComponent('element', {
         pivot: new pc.Vec2(0.5, 0.5),
         anchor: new pc.Vec4(0.5, 1, 0.5, 1),
@@ -134,14 +133,22 @@ MainScene.prototype.initialize = function() {
 };
 
 MainScene.prototype.inputDown = function(event) {
-    //tapPos.translate(0,1,0);
+    let screenX = app.touch ? event.touches[0].x : event.x;
+    let screenY = app.touch ? event.touches[0].y : event.y;
+
+    tapPosVal = camera.camera.screenToWorld(screenX,screenY,1);
+    tapPos.setPosition(tapPosVal);
+
 }
 
 MainScene.prototype.inputMove = function(event) {
     let screenX = app.touch ? event.touches[0].x : event.x;
     let screenY = app.touch ? event.touches[0].y : event.y;
 
-    tapPos.setPosition(camera.camera.screenToWorld(screenX,screenY,1));
+    holdPosVal = camera.camera.screenToWorld(screenX,screenY,1);
+    holdPos.setPosition(holdPosVal);
+
+    //topText.element.text = "tap: " + tapPosVal + "hold: " + holdPosVal;
 }
 
 MainScene.prototype.inputUp = function(event) {
