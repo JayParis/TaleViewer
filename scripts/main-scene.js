@@ -215,7 +215,7 @@ function loadRemoteImages() {
 
     var remoteImages = [];
             
-    for (let i = 1; i <= 160; i++) {
+    for (let i = 1; i <= 160; i+=2) {
         let end = i.toString().padStart(4,'0');
         console.log(end);
         remoteImages.push(new pc.Asset("img_" + i, "texture", {
