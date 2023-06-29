@@ -129,6 +129,12 @@
         const topText = new pc.Entity('toptext');
         var tapPosVal = new pc.Vec3;
         var holdPosVal = new pc.Vec3;
+        var inputting = false;
+
+        const vSens = 5;
+        var currViewerID = 0;
+        var previousViewerID = 0;
+        var loadedPage = false;
 
 
         const tapPos = new pc.Entity('tapPos');

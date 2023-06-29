@@ -42,13 +42,36 @@ MainScene.prototype.initialize = function() {
         anchor: new pc.Vec4(0.5, 1, 0.5, 1),
         type: pc.ELEMENTTYPE_TEXT,
         font: assets.bpFont.resource,
-        fontSize: 52,
+        fontSize: 22,
         text: "Tale Viewer",
         color: [0.01,0.01,0.01],
         alignment: [0.5,0.5],
     });
     uiGroup.addChild(topText);
     topText.setLocalPosition(0,-105,0);
+
+
+    const loadButton = new pc.Entity('load-button');
+    loadButton.addComponent('element', {
+        type: pc.ELEMENTTYPE_IMAGE,
+        anchor: new pc.Vec4(1.0, 0.0, 1.0, 0.0),
+        width: 225,
+        height: 100,
+        //margin: new pc.Vec4(0.0, 0.0, 0.0, 0.0),
+        pivot: new pc.Vec2(0.5, 0.5), 
+        useInput: true,
+    });
+    uiGroup.addChild(loadButton);
+    loadButton.setLocalPosition(-145,145,0);
+    loadButton.addComponent('button', {
+        imageEntity: loadButton,
+    });
+    loadButton.button.on('click', function(evt){
+        console.log("Button pressed");
+        loadRemoteImages();
+        loadButton.button.active = false;
+    });
+
 
 
     const light = new pc.Entity('light');
@@ -83,24 +106,9 @@ MainScene.prototype.initialize = function() {
         app.mouse.on(pc.EVENT_MOUSEUP, this.inputUp, this);
     }
 
-
     const onKeyDown = function (e) {
         if (e.key === pc.KEY_F) {
-            var remoteImages = [];
-            
-            for (let i = 1; i <= 6; i++) {
-                //srcUrls.push(_supabaseUrl + '/storage/v1/object/public/main-pages/Page_1_Main_000' + i + '.webp');
-                remoteImages.push(new pc.Asset("img_" + i, "texture", {
-                    url: _supabaseUrl + '/storage/v1/object/public/main-pages/Page_1_Main_000' + i + '.webp'
-                }));
-            }
-            var imageLoader = new pc.AssetListLoader(
-                Object.values(remoteImages),
-                app.assets
-            );
-            imageLoader.load(() => {
-                console.log(app.assets);
-            });
+            loadRemoteImages();
         }
         if(e.key === pc.KEY_1){
             plane.render.material.colorMap = app.assets.find("img_1","texture").resource;
@@ -138,21 +146,34 @@ MainScene.prototype.inputDown = function(event) {
 
     tapPosVal = camera.camera.screenToWorld(screenX,screenY,1);
     tapPos.setPosition(tapPosVal);
+    holdPos.setPosition(tapPos);
 
+    inputting = true;
 }
 
 MainScene.prototype.inputMove = function(event) {
+    if(!inputting)
+        return;
+
     let screenX = app.touch ? event.touches[0].x : event.x;
     let screenY = app.touch ? event.touches[0].y : event.y;
 
     holdPosVal = camera.camera.screenToWorld(screenX,screenY,1);
     holdPos.setPosition(holdPosVal);
 
-    //topText.element.text = "tap: " + tapPosVal + "hold: " + holdPosVal;
+    //topText.element.text = "tap: " + tapPosVal + "\nhold: " + holdPosVal;
+
+    //currViewerID = Math.abs(Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)) % 15);
+    //currViewerID = Math.abs((previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens))) % 15);
+    currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)),15));
+    if(loadedPage)
+        this.viewer();
+
 }
 
 MainScene.prototype.inputUp = function(event) {
-    
+    previousViewerID = currViewerID;
+    inputting = false;
 }
 
 
@@ -164,6 +185,18 @@ MainScene.prototype.swap = function(old) {
 
 };
 
+MainScene.prototype.viewer = function() {
+    //topText.element.text = "ids: " + currViewerID;
+
+    let offsetID = app.assets.find("img_1","texture").id;
+    //topText.element.text = "offset: " + (offsetID - currViewerID);
+    topText.element.text = "id: " + currViewerID;
+
+    plane.render.material.colorMap = app.assets.get(offsetID - currViewerID).resource;
+    plane.render.material.update();
+    console.log('updating page');
+};
+
 MainScene.prototype.resizeMobile = function() {
 
     let appHeight = document.getElementById('application').offsetHeight;
@@ -173,3 +206,30 @@ MainScene.prototype.resizeMobile = function() {
 
     plane.setLocalScale(scale,1,scale * 1.25066);
 };
+
+function mod(n, m) {
+    return ((n % m) + m) % m;
+}
+
+function loadRemoteImages(){
+    var remoteImages = [];
+            
+    for (let i = 1; i <= 15; i++) {
+        let end = i.toString().padStart(4,'0');
+        console.log(end);
+        remoteImages.push(new pc.Asset("img_" + i, "texture", {
+            url: _supabaseUrl + '/storage/v1/object/public/main-pages/Page_1_Main_' + end + '.webp'
+        }));
+    }
+    var imageLoader = new pc.AssetListLoader(
+        Object.values(remoteImages),
+        app.assets
+    );
+    imageLoader.load(() => {
+        loadedPage = true;
+        plane.render.material.colorMap = app.assets.find("img_1","texture").resource;
+        plane.render.material.update();
+
+        console.log(app.assets);
+    });
+}
