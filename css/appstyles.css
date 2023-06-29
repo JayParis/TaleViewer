@@ -23,6 +23,11 @@ body {
     width: 100%;
     z-index: 10;
     background-color:#007bff;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
 }
 
 #splash-img {
