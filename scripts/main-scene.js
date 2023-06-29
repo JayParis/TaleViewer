@@ -165,7 +165,7 @@ MainScene.prototype.inputMove = function(event) {
 
     //currViewerID = Math.abs(Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)) % 15);
     //currViewerID = Math.abs((previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens))) % 15);
-    currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)),15));
+    currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 160));
     if(loadedPage)
         this.viewer();
 
@@ -190,7 +190,6 @@ MainScene.prototype.viewer = function() {
 
     let offsetID = app.assets.find("img_1","texture").id;
     //topText.element.text = "offset: " + (offsetID - currViewerID);
-    topText.element.text = "id: " + currViewerID;
 
     plane.render.material.colorMap = app.assets.get(offsetID - currViewerID).resource;
     plane.render.material.update();
@@ -211,10 +210,12 @@ function mod(n, m) {
     return ((n % m) + m) % m;
 }
 
-function loadRemoteImages(){
+function loadRemoteImages() {
+    topText.element.text = "Loading Remote Images";
+
     var remoteImages = [];
             
-    for (let i = 1; i <= 15; i++) {
+    for (let i = 1; i <= 160; i++) {
         let end = i.toString().padStart(4,'0');
         console.log(end);
         remoteImages.push(new pc.Asset("img_" + i, "texture", {
