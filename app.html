@@ -50,6 +50,8 @@
 
         var device = pc.Application.getApplication().graphicsDevice;
         device.maxPixelRatio = window.devicePixelRatio;
+        
+        app.loader.getHandler("texture").crossOrigin = "anonymous";
 
         app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
         app.setCanvasResolution(pc.RESOLUTION_AUTO);
