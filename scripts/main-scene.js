@@ -174,7 +174,7 @@ MainScene.prototype.inputMove = function(event) {
 
     //currViewerID = Math.abs(Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)) % 15);
     //currViewerID = Math.abs((previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens))) % 15);
-    currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 160));
+    currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 80));
     if(loadedPage)
         viewer();
 
@@ -224,7 +224,7 @@ MainScene.prototype.swap = function(old) {
     var ratio  = Math.min ( hRatio, vRatio );
     ctx.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
 
-    setTimeout(100);
+    //setTimeout(100);
     //ctx.drawImage(imageList[0],1,1);
     //console.log(imageList[0]);
 
@@ -272,7 +272,7 @@ function loadRemoteImages() {
 function loadImageURLs(){
     document.getElementById('myCanvas').style.display = 'block';
 
-    for (let i = 1; i <= 160; i++) { //160
+    for (let i = 1; i <= 160; i+=2) { //160
         let end = i.toString().padStart(4,'0');
         fetch(_supabaseUrl + '/storage/v1/object/public/main-pages/Page_1_Main_' + end + '.webp')
             .then(res => res.blob())
@@ -281,7 +281,7 @@ function loadImageURLs(){
                 console.log(file);
                 var newImage = createImageBitmap(file).then(img => {
                     imageList.push(img);
-                    if(imageList.length == 160)
+                    if(imageList.length == 80)
                         allImagesReady();
                 });
             })
