@@ -39,7 +39,7 @@ body {
 #myCanvas{
     width: 1500px;
     height: 1876px;
-
+    display: none;
 }
 
 #application-canvas {

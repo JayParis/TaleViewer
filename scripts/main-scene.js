@@ -268,6 +268,8 @@ function loadRemoteImages() {
 }
 
 function loadImageURLs(){
+    document.getElementById('myCanvas').style.display = 'block';
+
     for (let i = 1; i <= 160; i++) { //160
         let end = i.toString().padStart(4,'0');
         fetch(_supabaseUrl + '/storage/v1/object/public/main-pages/Page_1_Main_' + end + '.webp')
