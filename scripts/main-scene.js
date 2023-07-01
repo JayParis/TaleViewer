@@ -174,7 +174,7 @@ MainScene.prototype.inputMove = function(event) {
 
     //currViewerID = Math.abs(Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)) % 15);
     //currViewerID = Math.abs((previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens))) % 15);
-    currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 160));
+    currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 40));
     if(loadedPage)
         viewer();
 
@@ -248,7 +248,7 @@ function loadRemoteImages() {
 
     var remoteImages = [];
             
-    for (let i = 1; i <= 160; i++) {
+    for (let i = 1; i <= 40; i+=4) {
         let end = i.toString().padStart(4,'0');
         console.log(end);
         remoteImages.push(new pc.Asset("img_" + i, "texture", {
@@ -280,7 +280,7 @@ function loadImageURLs(){
                 console.log(file);
                 var newImage = createImageBitmap(file).then(img => {
                     imageList.push(img);
-                    if(imageList.length == 160)
+                    if(imageList.length == 40)
                         allImagesReady();
                 });
             })
