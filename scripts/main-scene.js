@@ -210,7 +210,9 @@ MainScene.prototype.swap = function(old) {
     //document.getElementById('splash-img').src = 'https://cfzcrwfmlxquedvdajiw.supabase.co/storage/v1/object/public/main-pages/Page_1_Main_'+ end +'.webp';
     //setTimeout(viewer, 1000);
 
-    let canv = document.getElementById('myCanvas');
+    //let canv = document.getElementById('myCanvas');
+    
+    let canv = document.getElementById('myCanvas', { willReadFrequently: true });
     let ctx = canv.getContext("2d");
     //ctx.beginPath();
     //ctx.arc(95, 50, 40, 0, 2 * Math.PI);
