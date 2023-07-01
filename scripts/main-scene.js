@@ -224,7 +224,7 @@ MainScene.prototype.swap = function(old) {
     var ratio  = Math.min ( hRatio, vRatio );
     ctx.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
 
-
+    setTimeout(100);
     //ctx.drawImage(imageList[0],1,1);
     //console.log(imageList[0]);
 
