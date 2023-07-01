@@ -33,6 +33,13 @@ body {
 #splash-img {
     width: 100%;
     height: auto;
+    display: none;
+}
+
+#myCanvas{
+    width: 1500px;
+    height: 1876px;
+
 }
 
 #application-canvas {

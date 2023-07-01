@@ -69,6 +69,7 @@ MainScene.prototype.initialize = function() {
     loadButton.button.on('click', function(evt){
         console.log("Button pressed");
         //loadRemoteImages();
+        loadImageURLs();
         loadButton.button.active = false;
     });
 
@@ -110,7 +111,13 @@ MainScene.prototype.initialize = function() {
         if (e.key === pc.KEY_F) {
             console.log("Loading Remote Images");
             //loadRemoteImages();
-            loadedPage = true;
+            
+            //loadImageURLs();
+            
+            //loadedPage = false;
+        }
+        if (e.key === pc.KEY_T) {
+            allImagesReady();
         }
         if(e.key === pc.KEY_1){
             plane.render.material.colorMap = app.assets.find("img_1","texture").resource;
@@ -169,7 +176,7 @@ MainScene.prototype.inputMove = function(event) {
     //currViewerID = Math.abs((previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens))) % 15);
     currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 160));
     if(loadedPage)
-        this.viewer();
+        viewer();
 
 }
 
@@ -187,7 +194,7 @@ MainScene.prototype.swap = function(old) {
 
 };
 
-MainScene.prototype.viewer = function() {
+ function viewer() {
     /*
     //topText.element.text = "ids: " + currViewerID;
 
@@ -199,8 +206,26 @@ MainScene.prototype.viewer = function() {
     console.log('updating page');
     */
 
-    let end = currViewerID.toString().padStart(4,'0');
-    document.getElementById('splash-img').src = 'https://cfzcrwfmlxquedvdajiw.supabase.co/storage/v1/object/public/main-pages/Page_1_Main_'+ end +'.webp';
+    //let end = currViewerID.toString().padStart(4,'0');
+    //document.getElementById('splash-img').src = 'https://cfzcrwfmlxquedvdajiw.supabase.co/storage/v1/object/public/main-pages/Page_1_Main_'+ end +'.webp';
+    //setTimeout(viewer, 1000);
+
+    let canv = document.getElementById('myCanvas');
+    let ctx = canv.getContext("2d");
+    //ctx.beginPath();
+    //ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+    //ctx.stroke();
+    
+    let img = imageList[currViewerID];
+    var hRatio = canv.width / img.width;
+    var vRatio = canv.height / img.height;
+    var ratio  = Math.min ( hRatio, vRatio );
+    ctx.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
+
+
+    //ctx.drawImage(imageList[0],1,1);
+    //console.log(imageList[0]);
+
 };
 
 MainScene.prototype.resizeMobile = function() {
@@ -240,4 +265,35 @@ function loadRemoteImages() {
 
         console.log(app.assets);
     });
+}
+
+function loadImageURLs(){
+    for (let i = 1; i <= 160; i++) { //160
+        let end = i.toString().padStart(4,'0');
+        fetch(_supabaseUrl + '/storage/v1/object/public/main-pages/Page_1_Main_' + end + '.webp')
+            .then(res => res.blob())
+            .then(blob => {
+                const file = new File([blob], i.toString(), {type: blob.type});
+                console.log(file);
+                var newImage = createImageBitmap(file).then(img => {
+                    imageList.push(img);
+                    if(imageList.length == 160)
+                        allImagesReady();
+                });
+            })
+        //imageList.push();
+    }
+    loadedPage = true;
+    console.log("Finished Loading");
+}
+
+function allImagesReady(){
+    document.getElementById('myCanvas').style.width = "100vw";
+    document.getElementById('myCanvas').style.height = "auto";
+
+    //imageList.sort(function(a,b){return parseInt(a.name)-parseInt(b.name)});
+    imageList.sort((a, b) => {
+        return a.name - b.name;
+    });
+    console.log(imageList[0]);
 }
