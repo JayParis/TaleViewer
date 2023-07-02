@@ -176,14 +176,19 @@ MainScene.prototype.inputMove = function(event) {
     //currViewerID = Math.abs(Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)) % 15);
     //currViewerID = Math.abs((previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens))) % 15);
     currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 40));
-    if(loadedPage)
-        viewer();
+    
+    //if(loadedPage)
+    //    viewer();
 
 }
 
 MainScene.prototype.inputUp = function(event) {
     previousViewerID = currViewerID;
     inputting = false;
+
+    if(loadedPage){
+        console.log(imageList[0]);
+    }
 }
 
 
@@ -272,20 +277,23 @@ function loadRemoteImages() {
 function loadImageURLs(){
     document.getElementById('myCanvas').style.display = 'block';
 
-    for (let i = dlOffset; i <= 160; i+=4) { //160
+    for (let i = dlOffset; i <= 160; i+=1) { //160
         let end = i.toString().padStart(4,'0');
         fetch(_supabaseUrl + '/storage/v1/object/public/main-pages/Page_1_Main_' + end + '.webp')
             .then(res => res.blob())
             .then(blob => {
                 const file = new File([blob], i.toString(), {type: blob.type});
                 console.log(file);
+                imageList.push(file);
+
+                /*
                 var newImage = createImageBitmap(file).then(img => {
                     imageList.push(img);
-                    if(imageList.length == (40 * dlOffset))
+                    if(imageList.length == (160 * dlOffset))
                         allImagesReady();
                 });
+                */
             })
-        //imageList.push();
     }
     loadedPage = true;
     console.log("Finished Loading");
@@ -300,6 +308,7 @@ function allImagesReady(){
         return a.name - b.name;
     });
     console.log(imageList[0]);
-    dlOffset++;
-    loadButton.button.active = true;
+    
+    //dlOffset++;
+    //loadButton.button.active = true;
 }
