@@ -175,7 +175,7 @@ MainScene.prototype.inputMove = function(event) {
 
     //currViewerID = Math.abs(Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)) % 15);
     //currViewerID = Math.abs((previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens))) % 15);
-    currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 40));
+    currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 160));
     
     if(loadedPage)
         viewer();
@@ -186,9 +186,8 @@ MainScene.prototype.inputUp = function(event) {
     previousViewerID = currViewerID;
     inputting = false;
 
-    if(loadedPage){
-        console.log(imageList[0]);
-    }
+    if(loadedPage)
+        console.log(imageList.length);
 }
 
 
@@ -224,7 +223,7 @@ MainScene.prototype.swap = function(old) {
     //ctx.arc(95, 50, 40, 0, 2 * Math.PI);
     //ctx.stroke();
     
-    let img = imageList[currViewerID];
+    let img = imageList[currViewerID][0];
     var hRatio = canv.width / img.width;
     var vRatio = canv.height / img.height;
     var ratio  = Math.min ( hRatio, vRatio );
@@ -277,20 +276,22 @@ function loadRemoteImages() {
 function loadImageURLs(){
     document.getElementById('myCanvas').style.display = 'block';
 
-    for (let i = dlOffset; i <= 160; i+=1) { //160
+    for (let i = 1; i <= 160; i+=1) { //160
         let end = i.toString().padStart(4,'0');
         fetch(_supabaseUrl + '/storage/v1/object/public/main-pages/750/Page_1_Main_' + end + '.webp')
             .then(res => res.blob())
             .then(blob => {
                 const file = new File([blob], i.toString(), {type: blob.type});
-                console.log(file);
                 
                 var newImage = createImageBitmap(file).then(img => {
-                    imageList.push(img);
+                    imageList.push([img, i]);
+                    bmpOrder.push(i);
+                    
+                    console.log(i);
+
                     if(imageList.length == 160)
                         allImagesReady();
                 });
-                
             })
     }
     loadedPage = true;
@@ -302,9 +303,20 @@ function allImagesReady(){
     document.getElementById('myCanvas').style.height = "auto";
 
     //imageList.sort(function(a,b){return parseInt(a.name)-parseInt(b.name)});
+    /*
     imageList.sort((a, b) => {
-        return a.name - b.name;
+        console.log(a[1]);
+        return bmpOrder.indexOf(a[1]) - bmpOrder.indexOf(b[1]);
     });
+    */
+    imageList.sort((a, b) => {
+        if(a[1] > b[1])
+            return 1;
+        if(a[1] < b[1])
+            return -1;
+        return 0;
+    });
+    
     console.log(imageList[0]);
     
     //dlOffset++;
