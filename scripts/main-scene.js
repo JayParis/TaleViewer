@@ -177,8 +177,8 @@ MainScene.prototype.inputMove = function(event) {
     //currViewerID = Math.abs((previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens))) % 15);
     currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)), 40));
     
-    //if(loadedPage)
-    //    viewer();
+    if(loadedPage)
+        viewer();
 
 }
 
@@ -279,20 +279,18 @@ function loadImageURLs(){
 
     for (let i = dlOffset; i <= 160; i+=1) { //160
         let end = i.toString().padStart(4,'0');
-        fetch(_supabaseUrl + '/storage/v1/object/public/main-pages/Page_1_Main_' + end + '.webp')
+        fetch(_supabaseUrl + '/storage/v1/object/public/main-pages/750/Page_1_Main_' + end + '.webp')
             .then(res => res.blob())
             .then(blob => {
                 const file = new File([blob], i.toString(), {type: blob.type});
                 console.log(file);
-                imageList.push(file);
-
-                /*
+                
                 var newImage = createImageBitmap(file).then(img => {
                     imageList.push(img);
-                    if(imageList.length == (160 * dlOffset))
+                    if(imageList.length == 160)
                         allImagesReady();
                 });
-                */
+                
             })
     }
     loadedPage = true;
