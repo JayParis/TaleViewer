@@ -1,5 +1,7 @@
 var MainScene = pc.createScript('Main-Scene-Script');
 
+let dlOffset = 1;
+
 MainScene.attributes.add('speed', { 
     type: 'number', default: 10 
 });
@@ -51,7 +53,6 @@ MainScene.prototype.initialize = function() {
     topText.setLocalPosition(0,-105,0);
 
 
-    const loadButton = new pc.Entity('load-button');
     loadButton.addComponent('element', {
         type: pc.ELEMENTTYPE_IMAGE,
         anchor: new pc.Vec4(1.0, 0.0, 1.0, 0.0),
@@ -271,7 +272,7 @@ function loadRemoteImages() {
 function loadImageURLs(){
     document.getElementById('myCanvas').style.display = 'block';
 
-    for (let i = 1; i <= 160; i+=4) { //160
+    for (let i = dlOffset; i <= 160; i+=4) { //160
         let end = i.toString().padStart(4,'0');
         fetch(_supabaseUrl + '/storage/v1/object/public/main-pages/Page_1_Main_' + end + '.webp')
             .then(res => res.blob())
@@ -280,7 +281,7 @@ function loadImageURLs(){
                 console.log(file);
                 var newImage = createImageBitmap(file).then(img => {
                     imageList.push(img);
-                    if(imageList.length == 40)
+                    if(imageList.length == (40 * dlOffset))
                         allImagesReady();
                 });
             })
@@ -299,4 +300,6 @@ function allImagesReady(){
         return a.name - b.name;
     });
     console.log(imageList[0]);
+    dlOffset++;
+    loadButton.button.active = true;
 }
