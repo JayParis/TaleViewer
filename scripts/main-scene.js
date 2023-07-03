@@ -14,6 +14,7 @@ if(isMobile){
     document.addEventListener("mouseup", e => { inputUp(e); });
     console.log("assigned mouse events");
 }
+console.log(isMobile);
 
 /*
 MainScene.prototype.initialize = function() {
@@ -42,8 +43,8 @@ MainScene.prototype.initialize = function() {
 function inputDown(event) {
     inputting = true;
 
-    let screenX = isMobile ? event.touches[0].x : event.x;
-    let screenY = isMobile ? event.touches[0].y : event.y;
+    let screenX = isMobile ? event.changedTouches[0].clientX : event.x;
+    let screenY = isMobile ? event.changedTouches[0].clientY : event.y;
 
     tapPosVal = [screenX, screenY];
 
@@ -57,9 +58,8 @@ function inputMove(event) {
     if(!inputting)
         return;
 
-    let screenX = isMobile ? event.touches[0].x : event.x;
-    let screenY = isMobile ? event.touches[0].y : event.y;
-
+    let screenX = isMobile ? event.changedTouches[0].clientX : event.x;
+    let screenY = isMobile ? event.changedTouches[0].clientY : event.y;
 
     //topText.element.text = "tap: " + tapPosVal + "\nhold: " + holdPosVal;
 
@@ -68,6 +68,7 @@ function inputMove(event) {
     holdPosVal = [screenX, screenY];
     currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal[0] * vSens) - (holdPosVal[0] * vSens)), 160));
     
+
     if(loadedPage)
         viewer();
 }
