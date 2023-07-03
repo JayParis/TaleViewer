@@ -116,6 +116,11 @@ function viewer() {
     var vRatio = canv.height / img.height;
     var ratio  = Math.min ( hRatio, vRatio );
     ctx.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
+    
+    let canv_2 = document.getElementById('blurCanvas', { willReadFrequently: true });
+    let ctx_2 = canv_2.getContext("2d");
+
+    ctx_2.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
 
     //ctx.drawImage(imageList[0],1,1);
     //console.log(imageList[0]);
@@ -153,6 +158,7 @@ function loadRemoteImages() {
 
 function loadImageURLs(){
     document.getElementById('myCanvas').style.display = 'block';
+    document.getElementById('blurCanvas').style.display = 'block';
 
     for (let i = 1; i <= 160; i+=1) { //160
         let end = i.toString().padStart(4,'0');
@@ -179,6 +185,9 @@ function allImagesReady(){
     document.getElementById('myCanvas').style.width = "100vw";
     document.getElementById('myCanvas').style.height = "auto";
 
+    document.getElementById('blurCanvas').style.width = "100vw";
+    document.getElementById('blurCanvas').style.height = "auto";
+
     //imageList.sort(function(a,b){return parseInt(a.name)-parseInt(b.name)});
     /*
     imageList.sort((a, b) => {
@@ -196,6 +205,7 @@ function allImagesReady(){
     
     console.log(imageList[0]);
     loadedPage = true;
+    viewer();
     
     //dlOffset++;
     //loadButton.button.active = true;

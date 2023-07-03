@@ -18,7 +18,7 @@ body {
 
 #splash {
     display: block;
-    position: absolute;
+    /*position: absolute;*/
     height: 50vh;
     width: 100%;
     z-index: 10;
@@ -37,6 +37,13 @@ body {
 }
 
 #myCanvas{
+    width: 1500px;
+    height: 1876px;
+    display: none;
+    /*filter: blur(30px);*/
+}
+
+#blurCanvas{
     width: 1500px;
     height: 1876px;
     display: none;
