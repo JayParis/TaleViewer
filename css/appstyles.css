@@ -47,7 +47,7 @@ body {
     width: 1500px;
     height: 1876px;
     display: none;
-    filter: blur(30px);
+    /*filter: blur(30px);*/
 }
 
 #application-canvas {
