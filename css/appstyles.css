@@ -10,7 +10,7 @@ body {
     overflow: hidden;
     background-color: #ffffff;
     font-family: Helvetica, arial, sans-serif;
-    position: relative;
+    position: fixed;
     width: 100%;
 
     -webkit-tap-highlight-color: transparent;
