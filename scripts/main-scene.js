@@ -43,6 +43,8 @@ MainScene.prototype.initialize = function() {
 function inputDown(event) {
     inputting = true;
 
+    event.preventDefault();
+
     let screenX = isMobile ? event.changedTouches[0].clientX : event.x;
     let screenY = isMobile ? event.changedTouches[0].clientY : event.y;
 
