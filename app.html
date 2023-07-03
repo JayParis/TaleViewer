@@ -36,141 +36,21 @@
         const _supabase  = createClient(_supabaseUrl, _supabaseKey);
 
         console.log('Supabase Instance: ', _supabase);
-        // Backend
 
-        
-
-        // create a PlayCanvas application
-        const canvas = document.getElementById('application');
-        canvas.style['-webkit-user-select'] = 'none';
-        const app = new pc.Application(canvas, {
-            elementInput: new pc.ElementInput(canvas),
-            mouse: new pc.Mouse(canvas),
-            touch: !!('ontouchstart' in window) ? new pc.TouchDevice(canvas) : null,
-            keyboard: new pc.Keyboard(window),
-        });
-
-        var device = pc.Application.getApplication().graphicsDevice;
-        device.maxPixelRatio = window.devicePixelRatio;
-        
-        app.loader.getHandler("texture").crossOrigin = "anonymous";
-
-        app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
-        app.setCanvasResolution(pc.RESOLUTION_AUTO);
-
-        // ensure canvas is resized when window changes size
-        window.addEventListener('resize', () => app.resizeCanvas());
-
-        const assets = {    
-            bpFont: new pc.Asset("Blender-Pro-Font", "font", {
-                url: "./assets/fonts/BlenderPro-Medium.json",
-            }),
-            testTexture: new pc.Asset(
-                "Test-Texture",
-                "texture",
-                { url: "./assets/textures/DemoIMG_10_WP.webp" },
-                { type: pc.TEXTURETYPE_RGBP, mipmaps: false }
-            ),
-            vs: new pc.Asset("Bolt-Vertex-Shader", "shader", {
-                url: "./assets/shaders/bolt_vertex.glsl",
-            }),
-            fs: new pc.Asset("Bolt-Fragment-Shader", "shader", {
-                url: "./assets/shaders/bolt_fragment.glsl",
-            }),
-            mainScene: new pc.Asset("Main-Scene-Script", "script", {
-                url: "./scripts/main-scene.js",
-            }),
-            safeArea: new pc.Asset("Safe-Area-Script", "script", {
-                url: "./scripts/mobile-safe-area.js",
-            }),
-        };
-        const assetListLoader = new pc.AssetListLoader(
-            Object.values(assets),
-            app.assets
-        );
-        assetListLoader.load(() => {
-
-            app.root.addComponent('script');
-            app.root.script.create("Main-Scene-Script");
-
-            uiGroup.addComponent('script');
-            uiGroup.script.create("mobileSafeArea");
-
-            app.start();
-
-            //document.getElementById('splash').style.display = 'none';
-        });
-
-        const camera = new pc.Entity('camera');
-        camera.addComponent('camera', {
-            fov: 12,
-            orthoHeight: 10,
-            projection: pc.PROJECTION_ORTHOGRAPHIC,
-            clearColor: new pc.Color(1, 0.7, 0.7) //0.1, 0.1, 0.01
-        });
-        app.root.addChild(camera);
-        camera.setPosition(0, 0, 10);
-
-        const screen = new pc.Entity();
-        screen.addComponent("screen", {
-            referenceResolution: new pc.Vec2(1280, 720), //1280, 720
-            scaleBlend: 0.5,
-            scaleMode: pc.SCALEMODE_BLEND,
-            screenSpace: true,
-        });
-        app.root.addChild(screen);
-        
-        const uiGroup = new pc.Entity('ui_group');
-        uiGroup.addComponent('element', {
-            type: pc.ELEMENTTYPE_GROUP,
-            anchor: new pc.Vec4(0.0, 0.0, 1.0, 1.0),
-            margin: new pc.Vec4(0.0, 0.0, 0.0, 0.0),
-            pivot: new pc.Vec2(0.0, 0.0), 
-        });
-        screen.addChild(uiGroup);
-
-        const plane = new pc.Entity('plane');
-        const topText = new pc.Entity('toptext');
-        const loadButton = new pc.Entity('load-button');
-
-        var tapPosVal = new pc.Vec3;
-        var holdPosVal = new pc.Vec3;
+        var tapPosVal = [0,0];
+        var holdPosVal = [0,0];
         var inputting = false;
 
-        const vSens = 7; //5
+        const vSens = 3; //5
         var currViewerID = 0;
         var previousViewerID = 0;
         var loadedPage = false; //false
 
         var imageList = [];
         var bmpOrder = [];
-
-
-        const tapPos = new pc.Entity('tapPos');
-        tapPos.addComponent('render', {
-            type: 'plane'
-        });
-        app.root.addChild(tapPos);
-        tapPos.setEulerAngles(90,0,0);
-        tapPos.setPosition(0,0,1);
-        tapPos.setLocalScale(0.5,0.5,0.5);
-        var tapPosMat = new pc.BasicMaterial();
-        tapPosMat.color.set(1,0,0);
-        tapPos.render.material = tapPosMat;
-
-        const holdPos = new pc.Entity('holdPos');
-        holdPos.addComponent('render', {
-            type: 'plane'
-        });
-        app.root.addChild(holdPos);
-        holdPos.setEulerAngles(90,0,0);
-        holdPos.setPosition(0,0,2);
-        holdPos.setLocalScale(0.25,0.25,0.25);
-        var holdPosMat = new pc.BasicMaterial();
-        holdPosMat.color.set(1,0,1);
-        holdPos.render.material = holdPosMat;
         
     </script>
+    <script src='./scripts/main-scene.js'></script>
     <!--<script src='./scripts/ui-input-library.js'></script>-->
 </body>
 </html>
