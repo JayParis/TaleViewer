@@ -186,7 +186,7 @@ function allImagesReady(){
     document.getElementById('myCanvas').style.height = "auto";
 
     document.getElementById('blurCanvas').style.width = "100vw";
-    document.getElementById('blurCanvas').style.height = "125.06vw";
+    document.getElementById('blurCanvas').style.height = "auto"; //125.06vw
 
     //imageList.sort(function(a,b){return parseInt(a.name)-parseInt(b.name)});
     /*
