@@ -14,8 +14,6 @@ if(isMobile){
     document.addEventListener("mouseup", e => { inputUp(e); });
     console.log("assigned mouse events");
 }
-console.log(isMobile);
-
 
 /*
 MainScene.prototype.initialize = function() {
@@ -44,8 +42,6 @@ MainScene.prototype.initialize = function() {
 function inputDown(event) {
     inputting = true;
 
-    console.log(event);
-
     tapPosVal = [event.x, event.y];
 
     if(!beganLoad){
@@ -64,7 +60,6 @@ function inputMove(event) {
     //currViewerID = Math.abs(Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)) % 15);
     //currViewerID = Math.abs((previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens))) % 15);
     holdPosVal = [event.x, event.y];
-    
     currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal[0] * vSens) - (holdPosVal[0] * vSens)), 160));
     
     if(loadedPage)
