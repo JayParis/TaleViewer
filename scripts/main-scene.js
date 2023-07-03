@@ -58,6 +58,8 @@ function inputMove(event) {
     if(!inputting)
         return;
 
+    event.preventDefault();
+
     let screenX = isMobile ? event.changedTouches[0].clientX : event.x;
     let screenY = isMobile ? event.changedTouches[0].clientY : event.y;
 
