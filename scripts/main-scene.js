@@ -42,7 +42,10 @@ MainScene.prototype.initialize = function() {
 function inputDown(event) {
     inputting = true;
 
-    tapPosVal = [event.x, event.y];
+    let screenX = isMobile ? event.touches[0].x : event.x;
+    let screenY = isMobile ? event.touches[0].y : event.y;
+
+    tapPosVal = [screenX, screenY];
 
     if(!beganLoad){
         loadImageURLs();
@@ -54,12 +57,15 @@ function inputMove(event) {
     if(!inputting)
         return;
 
+    let screenX = isMobile ? event.touches[0].x : event.x;
+    let screenY = isMobile ? event.touches[0].y : event.y;
+
 
     //topText.element.text = "tap: " + tapPosVal + "\nhold: " + holdPosVal;
 
     //currViewerID = Math.abs(Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens)) % 15);
     //currViewerID = Math.abs((previousViewerID + Math.trunc((tapPosVal.x * vSens) - (holdPosVal.x * vSens))) % 15);
-    holdPosVal = [event.x, event.y];
+    holdPosVal = [screenX, screenY];
     currViewerID = Math.abs(mod(previousViewerID + Math.trunc((tapPosVal[0] * vSens) - (holdPosVal[0] * vSens)), 160));
     
     if(loadedPage)
